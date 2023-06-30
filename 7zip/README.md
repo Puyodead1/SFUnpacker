@@ -1,0 +1,1 @@
+C, CPP, and DOC folders are all part of the 7-zip LZMA SDK: https://www.7-zip.org/sdk.html
