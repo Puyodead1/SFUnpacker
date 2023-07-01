@@ -82,24 +82,44 @@ int main(int argc, char* argv[])
 
         std::cout << "File Count: " << sfInst->GetCount() << std::endl;
 
+        std::vector<std::string> failed{};
         for (int i = 0; i < sfInst->GetCount(); i++)
         {
             SFFileEntry fileEntry = sfInst->GetFile(i);
-            std::wstring wstr(fileEntry.LocalPath.begin(), fileEntry.LocalPath.end());
+            std::string fullPath = "extracted\\" + fileEntry.LocalPath;
+            std::wstring wstr(fullPath.begin(), fullPath.end());
             const wchar_t* wcharPath = wstr.c_str();
             if (CreateDirectories(wcharPath)) {
-                AStream* outStream = CFileStream::Open(wcharPath, false, true);
+                CFileStream* outStream = CFileStream::Open(wcharPath, false, true);
                 if (!outStream)
                 {
                     std::cerr << "Failed to get outstream for file " + fileEntry.LocalPath << std::endl;
                     continue;
                 }
-                std::cout << "Extracting " << fileEntry.LocalPath << std::endl;
-                sfInst->ExtractFile(i, outStream);
+
+                if (!sfInst->ExtractFile(i, outStream))
+                {
+                    failed.push_back(fileEntry.LocalPath);
+                }
+                else 
+                {
+                    std::cout << "Extracted " << fileEntry.LocalPath << std::endl;
+                }
+                outStream->Close();
             }
-            else
+        }
+
+        int failCount = failed.size();
+        if (failCount == 0)
+        {
+            std::cout << "All files extracted successfully!" << std::endl;
+        }
+        else
+        {
+            std::cerr << failCount << " files failed to extract." << std::endl;
+            for (std::string failure : failed)
             {
-                continue;
+                std::cout << "  " << failure << std::endl;
             }
         }
     }
@@ -109,7 +129,13 @@ int main(int argc, char* argv[])
         FreeInstaller(sfInst);
     }
 
-   
     delete[] wideStr;
+
+    if (sfInst == nullptr)
+    {
+        std::cerr << "sfInst was null!" << std::endl;
+        return 1;
+    }
+
     return 0;
 }
