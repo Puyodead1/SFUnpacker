@@ -200,15 +200,14 @@ int SetupFactory8::EnumFiles()
 		switch (m_eBaseCompression)
 		{
 		case COMP_LZMA:
-			//unpacked = LzmaDecomp(m_pInFile, (uint32_t)fileSize, destUnpack, &destSize, &destCrc);
-			std::cout << "Unsupported compression!" << std::endl;
+			unpacked = LzmaDecomp(m_pInFile, (uint32_t)fileSize, destUnpack, &destSize, &destCrc);
 			break;
 		case COMP_LZMA2:
 			unpacked = Lzma2Decomp(m_pInFile, (uint32_t)fileSize, destUnpack, &destSize, &destCrc);
 			break;
 		case COMP_PKWARE:
 			/*unpacked = Explode(m_pInFile, (uint32_t)fileSize, destUnpack, &destSize, &destCrc);*/
-			std::cout << "Unsupported compression!" << std::endl;
+			std::cout << "PKWare: Unsupported compression!" << std::endl;
 			break;
 		}
 

@@ -33,6 +33,12 @@
     <ClCompile Include="Decompress.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="blast.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SetupFactory7.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="PEHelper.h">
@@ -48,6 +54,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Decompress.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="blast.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SetupFactory7.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

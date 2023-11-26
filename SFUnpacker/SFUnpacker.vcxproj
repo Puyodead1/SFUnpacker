@@ -71,8 +71,8 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>C:\Users\23562\source\repos\SFUnpacker\depends\7zip\CPP;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Users\23562\source\repos\SFUnpacker\depends\7zip\CPP\7zip;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(IncludePath)</IncludePath>
+    <LibraryPath>$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -108,14 +108,13 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Users\23562\source\repos\SFUnpacker;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>Version.lib;7zip.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>C:\Users\23562\source\repos\SFUnpacker\x64\Debug;C:\vcpkg\installed\x64-windows\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>Version.lib;7zip.lib;zlib.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>D:\vcpkg\installed\x64-windows\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -135,16 +134,20 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="blast.c" />
     <ClCompile Include="Decompress.cpp" />
     <ClCompile Include="PEHelper.cpp" />
+    <ClCompile Include="SetupFactory7.cpp" />
     <ClCompile Include="SetupFactory8.cpp" />
     <ClCompile Include="SfFile.cpp" />
     <ClCompile Include="SFUnpacker.cpp" />
     <ClCompile Include="Streams.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="blast.h" />
     <ClInclude Include="Decompress.h" />
     <ClInclude Include="PEHelper.h" />
+    <ClInclude Include="SetupFactory7.h" />
     <ClInclude Include="SetupFactory8.h" />
     <ClInclude Include="SfFile.h" />
     <ClInclude Include="Streams.h" />

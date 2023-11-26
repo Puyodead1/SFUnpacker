@@ -4,7 +4,7 @@
 #include "Decompress.h"
 
 //#include "SetupFactory56.h"
-//#include "SetupFactory7.h"
+#include "SetupFactory7.h"
 #include "SetupFactory8.h"
 
 template <typename T>
@@ -25,6 +25,8 @@ SetupFactoryFile* OpenInstaller(const wchar_t* filePath)
 	CFileStream* inFile = CFileStream::Open(filePath, true, false);
 	if (!inFile) return nullptr;
 
+	//RNN(SetupFactory56, inFile);
+	RNN(SetupFactory7, inFile);
 	RNN(SetupFactory8, inFile);
 
 	delete inFile;
@@ -107,8 +109,7 @@ bool SetupFactoryFile::ExtractFile(int index, AStream* outStream)
 	switch (entry.Compression)
 	{
 	case COMP_PKWARE:
-		//ret = Explode(m_pInFile, (uint32_t)entry.PackedSize, outStream, nullptr, &outCrc);
-		std::cout << "PKWare: Unsupported compression!" << std::endl;
+		ret = Explode(m_pInFile, (uint32_t)entry.PackedSize, outStream, nullptr, &outCrc);
 		break;
 	case COMP_LZMA:
 		ret = LzmaDecomp(m_pInFile, (uint32_t)entry.PackedSize, outStream, nullptr, &outCrc);

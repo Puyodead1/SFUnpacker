@@ -50,6 +50,8 @@ int main(int argc, char* argv[])
         return 1;
     }
 
+    std::cout << "Extracting..." << std::endl;
+
     size_t narrowStrLen = strlen(path) + 1; 
     size_t wideStrSize = 0;
     wchar_t* wideStr = nullptr;
@@ -58,7 +60,7 @@ int main(int argc, char* argv[])
     mbstowcs_s(nullptr, wideStr, wideStrSize, path, narrowStrLen);
 
     SetupFactoryFile* sfInst = OpenInstaller(wideStr);
-    if ((sfInst != nullptr) && (sfInst->EnumFiles() > 0))
+    if ((sfInst != nullptr))
     {
         std::cout << "Setup Factory " << sfInst->GetVersion() << std::endl;
         switch (sfInst->GetCompression())
@@ -80,47 +82,54 @@ int main(int argc, char* argv[])
             break;
         }
 
-        std::cout << "File Count: " << sfInst->GetCount() << std::endl;
-
-        std::vector<std::string> failed{};
-        for (int i = 0; i < sfInst->GetCount(); i++)
+        if (sfInst->EnumFiles() > 0) 
         {
-            SFFileEntry fileEntry = sfInst->GetFile(i);
-            std::string fullPath = "extracted\\" + fileEntry.LocalPath;
-            std::wstring wstr(fullPath.begin(), fullPath.end());
-            const wchar_t* wcharPath = wstr.c_str();
-            if (CreateDirectories(wcharPath)) {
-                CFileStream* outStream = CFileStream::Open(wcharPath, false, true);
-                if (!outStream)
-                {
-                    std::cerr << "Failed to get outstream for file " + fileEntry.LocalPath << std::endl;
-                    continue;
-                }
+            std::cout << "File Count: " << sfInst->GetCount() << std::endl;
 
-                if (!sfInst->ExtractFile(i, outStream))
-                {
-                    failed.push_back(fileEntry.LocalPath);
-                }
-                else 
-                {
-                    std::cout << "Extracted " << fileEntry.LocalPath << std::endl;
-                }
-                outStream->Close();
-            }
-        }
-
-        int failCount = failed.size();
-        if (failCount == 0)
-        {
-            std::cout << "All files extracted successfully!" << std::endl;
-        }
-        else
-        {
-            std::cerr << failCount << " files failed to extract." << std::endl;
-            for (std::string failure : failed)
+            std::vector<std::string> failed{};
+            for (int i = 0; i < sfInst->GetCount(); i++)
             {
-                std::cout << "  " << failure << std::endl;
+                SFFileEntry fileEntry = sfInst->GetFile(i);
+                std::string fullPath = "extracted\\" + fileEntry.LocalPath;
+                std::wstring wstr(fullPath.begin(), fullPath.end());
+                const wchar_t* wcharPath = wstr.c_str();
+                if (CreateDirectories(wcharPath)) {
+                    CFileStream* outStream = CFileStream::Open(wcharPath, false, true);
+                    if (!outStream)
+                    {
+                        std::cerr << "Failed to get outstream for file " + fileEntry.LocalPath << std::endl;
+                        continue;
+                    }
+
+                    if (!sfInst->ExtractFile(i, outStream))
+                    {
+                        failed.push_back(fileEntry.LocalPath);
+                    }
+                    else
+                    {
+                        std::cout << "Extracted " << fileEntry.LocalPath << std::endl;
+                    }
+                    outStream->Close();
+                }
             }
+
+            int failCount = failed.size();
+            if (failCount == 0)
+            {
+                std::cout << "All files extracted successfully!" << std::endl;
+            }
+            else
+            {
+                std::cerr << failCount << " files failed to extract." << std::endl;
+                for (std::string failure : failed)
+                {
+                    std::cout << "  " << failure << std::endl;
+                }
+            }
+        }
+        else 
+        {
+            std::cerr << "No Files" << std::endl;
         }
     }
 
